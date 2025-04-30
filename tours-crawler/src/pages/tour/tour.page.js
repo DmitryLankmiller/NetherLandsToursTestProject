@@ -1,10 +1,10 @@
 import { sleep } from 'crawlee';
-// import { Page } from 'playwright';
 import { config } from '../../config.js';
+import { FlightDatesTable } from './flightDatesTable.element.js';
 
 export class TourPage {
   /**
-   * @param {Page} page
+   * @param {import("playwright").Page} page
    */
   constructor(page) {
     this.page = page;
@@ -14,6 +14,7 @@ export class TourPage {
     this.airportRow = this.filters.locator('xpath=.//*[contains(@class, "airport")]');
     this.airportRowCheckBoxes = this.airportRow.locator('xpath=.//*[@id="checks"]//label');
     this.arirportRowConfirmBtn = this.airportRow.locator('xpath=.//input[@value="Toepassen"]');
+    this.flightDatesTable = new FlightDatesTable(this.page.locator('xpath=.//*[@class="date fl"]'));
   }
 
   async openPriceTab() {
@@ -29,7 +30,7 @@ export class TourPage {
   /**
    * @param {string[]} values
    */
-  async selectAirportsByValue(values) {
+  async selectAirports(values) {
     await this.airportRow.click();
     const labels = await this.airportRowCheckBoxes.all();
     const filteredLabels = [];
@@ -46,5 +47,13 @@ export class TourPage {
     }
 
     await this.arirportRowConfirmBtn.click();
+  }
+
+  /**
+   * @param {string} date
+   * @param {string} duration
+   */
+  async selectTourDateAndDuration(date, duration) {
+    await this.flightDatesTable.clickTourBtn(date, duration);
   }
 }

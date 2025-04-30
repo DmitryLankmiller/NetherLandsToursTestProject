@@ -1,10 +1,20 @@
-import { createPlaywrightRouter } from 'crawlee';
+import { createPlaywrightRouter, sleep } from 'crawlee';
+import { TourPage } from './pages/tour/tour.page.js';
 
 export const router = createPlaywrightRouter();
 
 router.addHandler('tour-page', async ({ request, page, log, pushData }) => {
   const title = await page.title();
   log.info(`${title}`, { url: request.loadedUrl });
+
+  let tourPage = new TourPage(page);
+  await tourPage.openPriceTab();
+  await tourPage.waitForLoading();
+  await tourPage.selectAirports(['Amsterdam', 'Antwerpen', 'Brussel Charleroi']);
+  await tourPage.waitForLoading();
+  await tourPage.selectTourDateAndDuration('di 9 dec', '7');
+  
+  await sleep(120_000);
 
   await pushData({
     url: request.loadedUrl,
