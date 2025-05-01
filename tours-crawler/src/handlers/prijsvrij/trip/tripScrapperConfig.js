@@ -1,3 +1,3 @@
 export const airports = ['Amsterdam', 'Antwerpen', 'Brussel Charleroi'];
-export const tourDate = 'di 9 dec';
-export const tourDuration = '7';
+export const tripDate = 'di 9 dec';
+export const tripDuration = '7';
