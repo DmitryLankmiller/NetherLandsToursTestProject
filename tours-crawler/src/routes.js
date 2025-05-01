@@ -7,7 +7,7 @@ router.addHandler('tour-page', async ({ request, page, log, pushData }) => {
   const title = await page.title();
   log.info(`${title}`, { url: request.loadedUrl });
 
-  let tourPage = new TourPage(page);
+  const tourPage = new TourPage(page);
   await tourPage.openPriceTab();
   await tourPage.waitForPriceTableLoading();
   await tourPage.selectAirports(['Amsterdam', 'Antwerpen', 'Brussel Charleroi']);
@@ -16,10 +16,11 @@ router.addHandler('tour-page', async ({ request, page, log, pushData }) => {
   await tourPage.waitForGetPricesLoading();
   await tourPage.selectHolidayWithLowestPrice();
   await tourPage.waitForTripCheckLoading();
-  await sleep(120_000);
-
+  const priceInfo = await tourPage.getPriceInfo();
+  console.log(priceInfo);
   await pushData({
     url: request.loadedUrl,
     title,
+    ...priceInfo,
   });
 });

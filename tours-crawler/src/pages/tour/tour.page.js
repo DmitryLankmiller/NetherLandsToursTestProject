@@ -2,6 +2,7 @@ import { sleep } from 'crawlee';
 import { config } from '../../config.js';
 import { FlightDatesTable } from './flightDatesTable.element.js';
 import { HolidaySelector } from './holidaySelector.element.js';
+import { ReceiptElement } from './receipt.element.js';
 
 export class TourPage {
   /**
@@ -22,6 +23,7 @@ export class TourPage {
     this.flightDatesTable = new FlightDatesTable(this.flightDatesTableRoot);
     this.holidaySelectorRoot = this.page.locator('id=pnlTrips');
     this.holidaySelector = new HolidaySelector(this.holidaySelectorRoot);
+    this.receiptElement = new ReceiptElement(this.receipt);
   }
 
   async openPriceTab() {
@@ -81,5 +83,13 @@ export class TourPage {
     await this.holidaySelectorRoot.waitFor({ state: 'visible' });
     await this.holidaySelector.showMoreTrips();
     await this.holidaySelector.clickLowestPrice();
+  }
+
+  async getPriceInfo() {
+    return {
+      price: await this.receiptElement.getPriceString(),
+      currency: await this.receiptElement.getPriceCurrency(),
+      value: await this.receiptElement.getPriceNumber(),
+    };
   }
 }
