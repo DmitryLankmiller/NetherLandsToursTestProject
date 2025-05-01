@@ -1,3 +1,3 @@
 export const config = {
-    waitInterval: 500
+  waitInterval: 500,
 };

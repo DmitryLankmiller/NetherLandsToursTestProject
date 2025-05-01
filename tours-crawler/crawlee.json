@@ -1,4 +1,4 @@
 {
-    "logLevel": "DEBUG",
-    "headless": false
+  "logLevel": "DEBUG",
+  "headless": false
 }

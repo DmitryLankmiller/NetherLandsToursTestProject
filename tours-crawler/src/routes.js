@@ -15,6 +15,7 @@ router.addHandler('tour-page', async ({ request, page, log, pushData }) => {
   await tourPage.selectTourDateAndDuration('di 9 dec', '7');
   await tourPage.waitForGetPricesLoading();
   await tourPage.selectHolidayWithLowestPrice();
+  await tourPage.waitForTripCheckLoading();
   await sleep(120_000);
 
   await pushData({

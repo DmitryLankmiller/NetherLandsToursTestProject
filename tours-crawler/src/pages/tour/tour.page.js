@@ -13,6 +13,7 @@ export class TourPage {
     this.waitPricesTable = this.page.locator('id=matrix-wait-box');
     this.receipt = this.page.locator('id=receipt');
     this.waitGetPrices = this.receipt.locator('xpath=.//*[@class="fl pnlwait1"]');
+    this.waitTripCheck = this.receipt.locator('xpath=.//*[@class="fl pnlwait2"]');
     this.filters = this.page.locator('id=matrFil');
     this.airportRow = this.filters.locator('xpath=.//*[contains(@class, "airport")]');
     this.airportRowCheckBoxes = this.airportRow.locator('xpath=.//*[@id="checks"]//label');
@@ -35,6 +36,12 @@ export class TourPage {
 
   async waitForGetPricesLoading(waitInterval) {
     while (await this.waitGetPrices.isVisible()) {
+      await sleep(waitInterval || config.waitInterval);
+    }
+  }
+
+  async waitForTripCheckLoading(waitInterval) {
+    while (await this.waitTripCheck.isVisible()) {
       await sleep(waitInterval || config.waitInterval);
     }
   }
