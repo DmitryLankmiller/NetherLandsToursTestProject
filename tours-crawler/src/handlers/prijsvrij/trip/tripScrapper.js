@@ -1,7 +1,11 @@
+import { TourPage } from '../../../pages/prijsvrij/trip/trip.page.js';
 import { airports, tourDate, tourDuration } from './tripScrapperConfig.js';
 
 export const tripScrapperLabel = 'trip-page';
 
+/**
+ * @param {Omit<PlaywrightCrawlingContext<Dictionary>, "request"> & {request: LoadedRequest<...>;}} param0
+ */
 export async function tripScrapper({ request, page, log, pushData }) {
   const title = await page.title();
   log.info(`${title}`, { url: request.loadedUrl });
