@@ -3,6 +3,7 @@ import { config } from '../../config.js';
 import { FlightDatesTable } from './flightDatesTable.element.js';
 import { HolidaySelector } from './holidaySelector.element.js';
 import { ReceiptElement } from './receipt.element.js';
+import { FiltersElement } from './filters.element.js';
 
 export class TourPage {
   /**
@@ -16,10 +17,8 @@ export class TourPage {
     this.waitGetPrices = this.receipt.locator('xpath=.//*[@class="fl pnlwait1"]');
     this.waitTripCheck = this.receipt.locator('xpath=.//*[@class="fl pnlwait2"]');
     this.filters = this.page.locator('id=matrFil');
-    this.airportRow = this.filters.locator('xpath=.//*[contains(@class, "airport")]');
-    this.airportRowCheckBoxes = this.airportRow.locator('xpath=.//*[@id="checks"]//label');
-    this.arirportRowConfirmBtn = this.airportRow.locator('xpath=.//input[@value="Toepassen"]');
     this.flightDatesTableRoot = this.page.locator('xpath=.//*[@class="date fl"]');
+    this.filtersElement = new FiltersElement(this.filters);
     this.flightDatesTable = new FlightDatesTable(this.flightDatesTableRoot);
     this.holidaySelectorRoot = this.page.locator('id=pnlTrips');
     this.holidaySelector = new HolidaySelector(this.holidaySelectorRoot);
@@ -52,22 +51,9 @@ export class TourPage {
    * @param {string[]} values
    */
   async selectAirports(values) {
-    await this.airportRow.click();
-    const labels = await this.airportRowCheckBoxes.all();
-    const filteredLabels = [];
-
-    for (let label of labels) {
-      const labelText = await label.innerText();
-      if (values.includes(labelText)) {
-        filteredLabels.push(label);
-      }
-    }
-
-    for (let label of filteredLabels) {
-      await label.click();
-    }
-
-    await this.arirportRowConfirmBtn.click();
+    await this.filtersElement.expandAirportsSelector();
+    await this.filtersElement.selectAirports(values);
+    await this.filtersElement.clickConfirmSelectedAirportsBtn();
   }
 
   /**
