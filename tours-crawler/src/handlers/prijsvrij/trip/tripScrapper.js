@@ -25,12 +25,15 @@ export async function tripScrapper({ request, page, log, pushData }) {
   log.info('Select holiday with lowest price');
   log.info('Wait for trips check loading...');
   await tripPage.waitForTripCheckLoading();
+  const departureAirport = await tripPage.getDepartureAirport();
+  log.info(`Extract departure airport: ${departureAirport}`);
   const priceInfo = await tripPage.getPriceInfo();
   log.info(`Extract price: ${priceInfo.price}`);
   await pushData({
     url: request.loadedUrl,
     title: title,
     searchedAirports: airports,
+    airport: departureAirport,
     tripDate: tripDate,
     days: tripDuration,
     ...priceInfo,

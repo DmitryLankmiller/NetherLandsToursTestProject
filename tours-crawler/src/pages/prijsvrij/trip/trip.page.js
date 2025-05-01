@@ -78,4 +78,8 @@ export class TourPage {
       value: await this.receiptElement.getPriceNumber(),
     };
   }
+
+  async getDepartureAirport() {
+    return await this.receiptElement.getOutgoingDeparture();
+  }
 }
