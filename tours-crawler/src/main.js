@@ -1,6 +1,7 @@
 import { PlaywrightCrawler } from 'crawlee';
 import { router } from './routes.js';
 import { tripScrapperLabel } from './handlers/prijsvrij/trip/tripScrapper.js';
+import { proxyConfiguration } from './proxy.js';
 
 const startUrls = [
   {
@@ -11,6 +12,7 @@ const startUrls = [
 
 const crawler = new PlaywrightCrawler({
   requestHandler: router,
+  proxyConfiguration: proxyConfiguration,
 });
 
 await crawler.run(startUrls);
