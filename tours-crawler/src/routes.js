@@ -1,5 +1,5 @@
 import { createPlaywrightRouter, sleep } from 'crawlee';
-import { TourPage } from './pages/tour/tour.page.js';
+import { TourPage } from './pages/prijsvrij/trip/trip.page.js';
 
 export const router = createPlaywrightRouter();
 
@@ -7,16 +7,16 @@ router.addHandler('tour-page', async ({ request, page, log, pushData }) => {
   const title = await page.title();
   log.info(`${title}`, { url: request.loadedUrl });
 
-  const tourPage = new TourPage(page);
-  await tourPage.openPriceTab();
-  await tourPage.waitForPriceTableLoading();
-  await tourPage.selectAirports(['Amsterdam', 'Antwerpen', 'Brussel Charleroi']);
-  await tourPage.waitForPriceTableLoading();
-  await tourPage.selectTourDateAndDuration('di 9 dec', '7');
-  await tourPage.waitForGetPricesLoading();
-  await tourPage.selectHolidayWithLowestPrice();
-  await tourPage.waitForTripCheckLoading();
-  const priceInfo = await tourPage.getPriceInfo();
+  const tripPage = new TourPage(page);
+  await tripPage.openPriceTab();
+  await tripPage.waitForPriceTableLoading();
+  await tripPage.selectAirports(['Amsterdam', 'Antwerpen', 'Brussel Charleroi']);
+  await tripPage.waitForPriceTableLoading();
+  await tripPage.selectTourDateAndDuration('di 9 dec', '7');
+  await tripPage.waitForGetPricesLoading();
+  await tripPage.selectHolidayWithLowestPrice();
+  await tripPage.waitForTripCheckLoading();
+  const priceInfo = await tripPage.getPriceInfo();
   console.log(priceInfo);
   await pushData({
     url: request.loadedUrl,

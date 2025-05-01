@@ -1,5 +1,5 @@
 import { sleep } from 'crawlee';
-import { config } from '../../config.js';
+import { config } from '../../../config.js';
 import { FlightDatesTable } from './flightDatesTable.element.js';
 import { HolidaySelector } from './holidaySelector.element.js';
 import { ReceiptElement } from './receipt.element.js';
