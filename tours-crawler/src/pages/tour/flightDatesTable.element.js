@@ -19,22 +19,11 @@ export class FlightDatesTable {
    * @param {string} duration
    */
   async clickTourBtn(date, duration) {
-    await this.table.waitFor({ state: 'visible' });
-
-    const durationValues = [];
-    for (let durationLocator of await this.tourDurations.all()) {
-      durationValues.push(await durationLocator.innerText());
-    }
+    const durationValues = await this.tourDurations.allInnerTexts();
     const durationIndex = durationValues.indexOf(duration);
 
-    const dateValues = [];
-    for (let dateLocator of await this.startDates.all()) {
-      dateValues.push(await dateLocator.innerText());
-    }
-    console.log(dateValues);
-
+    const dateValues = await this.startDates.allInnerTexts();
     const dateIndex = dateValues.indexOf(date);
-    console.log(dateIndex);
 
     await this.getTourBtn(dateIndex + 1, durationIndex).click();
   }

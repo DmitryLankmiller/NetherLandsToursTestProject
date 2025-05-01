@@ -9,11 +9,12 @@ router.addHandler('tour-page', async ({ request, page, log, pushData }) => {
 
   let tourPage = new TourPage(page);
   await tourPage.openPriceTab();
-  await tourPage.waitForLoading();
+  await tourPage.waitForPriceTableLoading();
   await tourPage.selectAirports(['Amsterdam', 'Antwerpen', 'Brussel Charleroi']);
-  await tourPage.waitForLoading();
+  await tourPage.waitForPriceTableLoading();
   await tourPage.selectTourDateAndDuration('di 9 dec', '7');
-  
+  await tourPage.waitForGetPricesLoading();
+  await tourPage.selectHolidayWithLowestPrice();
   await sleep(120_000);
 
   await pushData({

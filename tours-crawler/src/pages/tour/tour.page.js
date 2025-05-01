@@ -1,6 +1,7 @@
 import { sleep } from 'crawlee';
 import { config } from '../../config.js';
 import { FlightDatesTable } from './flightDatesTable.element.js';
+import { HolidaySelector } from './holidaySelector.element.js';
 
 export class TourPage {
   /**
@@ -9,20 +10,31 @@ export class TourPage {
   constructor(page) {
     this.page = page;
     this.priceTab = this.page.locator('id=tab-prices');
-    this.waitBox = this.page.locator('id="matrix-wait-box');
+    this.waitPricesTable = this.page.locator('id=matrix-wait-box');
+    this.receipt = this.page.locator('id=receipt');
+    this.waitGetPrices = this.receipt.locator('xpath=.//*[@class="fl pnlwait1"]');
     this.filters = this.page.locator('id=matrFil');
     this.airportRow = this.filters.locator('xpath=.//*[contains(@class, "airport")]');
     this.airportRowCheckBoxes = this.airportRow.locator('xpath=.//*[@id="checks"]//label');
     this.arirportRowConfirmBtn = this.airportRow.locator('xpath=.//input[@value="Toepassen"]');
-    this.flightDatesTable = new FlightDatesTable(this.page.locator('xpath=.//*[@class="date fl"]'));
+    this.flightDatesTableRoot = this.page.locator('xpath=.//*[@class="date fl"]');
+    this.flightDatesTable = new FlightDatesTable(this.flightDatesTableRoot);
+    this.holidaySelectorRoot = this.page.locator('id=pnlTrips');
+    this.holidaySelector = new HolidaySelector(this.holidaySelectorRoot);
   }
 
   async openPriceTab() {
     await this.priceTab.click();
   }
 
-  async waitForLoading(waitInterval) {
-    while (await this.waitBox.isVisible()) {
+  async waitForPriceTableLoading(waitInterval) {
+    while (await this.waitPricesTable.isVisible()) {
+      await sleep(waitInterval || config.waitInterval);
+    }
+  }
+
+  async waitForGetPricesLoading(waitInterval) {
+    while (await this.waitGetPrices.isVisible()) {
       await sleep(waitInterval || config.waitInterval);
     }
   }
@@ -54,6 +66,13 @@ export class TourPage {
    * @param {string} duration
    */
   async selectTourDateAndDuration(date, duration) {
+    await this.flightDatesTableRoot.waitFor({ state: 'visible' });
     await this.flightDatesTable.clickTourBtn(date, duration);
+  }
+
+  async selectHolidayWithLowestPrice() {
+    await this.holidaySelectorRoot.waitFor({ state: 'visible' });
+    await this.holidaySelector.showMoreTrips();
+    await this.holidaySelector.clickLowestPrice();
   }
 }
